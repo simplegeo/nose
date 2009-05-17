@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+DEB_PYTHON_SYSTEM=pysupport
+DEB_COMPRESS_EXCLUDE= .js .inv
+
+include /usr/share/cdbs/1/rules/buildcore.mk
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/python-distutils.mk
+
+DEB_PYTHON_INSTALL_ARGS_ALL += --single-version-externally-managed --install-layout=deb
+
+common-build-indep/$(DEB_PYTHON_MODULE_PACKAGES)::
+	python setup.py build_sphinx
+
+binary-post-install/python-nose::
+	# the manpage is already being installed at the correct place
+	# remove the incorrect path
+	rm -rf debian/python-nose/usr/man
