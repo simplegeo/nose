@@ -1,3 +1,9 @@
+nose (0.11.3-1sg0) unstable; urgency=low
+
+  * New upstream version.
+
+ -- Ian Eure <ian@simplegeo.com>  Thu, 24 Jun 2010 15:01:28 -0700
+
 nose (0.11.1-1) unstable; urgency=low
 
   * New upstream release
