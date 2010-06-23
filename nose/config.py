@@ -206,15 +206,39 @@ class Config(object):
         self.traverseNamespace = False
         self.firstPackageWins = False
         self.parserClass = OptionParser
+        self.worker = False
         
         self._default = self.__dict__.copy()
         self.update(kw)
         self._orig = self.__dict__.copy()
 
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        del state['stream']
+        del state['_orig']
+        del state['_default']
+        del state['env']
+        del state['logStream']
+        # FIXME remove plugins, have only plugin manager class
+        state['plugins'] = self.plugins.__class__
+        return state
+
+    def __setstate__(self, state):
+        plugincls = state.pop('plugins')
+        self.update(state)
+        self.worker = True
+        # FIXME won't work for static plugin lists
+        self.plugins = plugincls()
+        self.plugins.loadPlugins()
+        # needed so .can_configure gets set appropriately
+        dummy_parser = self.parserClass()
+        self.plugins.addOptions(dummy_parser, {})
+        self.plugins.configure(self.options, self)
+    
     def __repr__(self):
         d = self.__dict__.copy()
         # don't expose env, could include sensitive info
-        d['env'] = {} 
+        d['env'] = {}
         keys = [ k for k in d.keys()
                  if not k.startswith('_') ]
         keys.sort()
@@ -530,6 +554,9 @@ class Config(object):
 class NoOptions(object):
     """Options container that returns None for all options.
     """
+    def __getstate__(self):
+        return {}
+    
     def __getattr__(self, attr):
         return None
 

@@ -311,6 +311,9 @@ class TestLoader(unittest.TestLoader):
         if path:
             path = os.path.realpath(path)
         for module_path in module_paths:
+            log.debug("Load tests from module path %s?", module_path)
+            log.debug("path: %s os.path.realpath(%s): %s",
+                      path, module_path, os.path.realpath(module_path))
             if (self.config.traverseNamespace or not path) or \
                     os.path.realpath(module_path).startswith(path):
                 tests.extend(self.loadTestsFromDir(module_path))
@@ -478,6 +481,21 @@ class TestLoader(unittest.TestLoader):
         return self.suiteClass(ContextList(cases, context=cls))
 
     def makeTest(self, obj, parent=None):
+        try:
+            return self._makeTest(obj, parent)
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:
+            exc = sys.exc_info()
+            try:
+                addr = test_address(obj)
+            except KeyboardInterrupt:
+                raise
+            except:
+                addr = None
+            return Failure(exc[0], exc[1], exc[2], address=addr)
+    
+    def _makeTest(self, obj, parent=None):
         """Given a test object and its parent, return a test case
         or test suite.
         """
