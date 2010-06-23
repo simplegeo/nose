@@ -2,9 +2,13 @@ import re
 import os
 import tempfile
 import unittest
-import nose.config
 import warnings
+import pickle
+import sys
 
+import nose.config
+from nose.plugins.manager import DefaultPluginManager
+from nose.plugins.skip import SkipTest
 
 
 class TestNoseConfig(unittest.TestCase):
@@ -13,10 +17,10 @@ class TestNoseConfig(unittest.TestCase):
         c = nose.config.Config()
         assert c.addPaths == True
         # FIXME etc
-        
+
     def test_reset(self):
         c = nose.config.Config()
-        c.include = 'include'        
+        c.include = 'include'
         assert c.include == 'include'
         c.reset()
         assert c.include is None
@@ -79,6 +83,24 @@ class TestNoseConfig(unittest.TestCase):
         # this matters eg. with python -c "import nose; nose.main()"
         c.configure(['-v', 'mytests'])
         self.assertEqual(c.verbosity, 1)
+
+    def test_pickle_empty(self):
+        c = nose.config.Config()
+        cp = pickle.dumps(c)
+        cc = pickle.loads(cp)
+
+    def test_pickle_configured(self):
+        if 'java' in sys.version.lower():
+            raise SkipTest("jython has no profiler plugin")
+        c = nose.config.Config(plugins=DefaultPluginManager())
+        c.configure(['--with-doctest', '--with-coverage', '--with-profile',
+                     '--with-id', '--attr=A', '--collect', '--all',
+                     '--with-isolation', '-d', '--with-xunit', '--processes=2',
+                     '--pdb'])
+        cp = pickle.dumps(c)
+        cc = pickle.loads(cp)
+        assert cc.plugins._plugins
+
 
 if __name__ == '__main__':
     unittest.main()

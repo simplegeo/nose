@@ -215,6 +215,8 @@ functional_tests/support/issue143/not-a-package/test.py
 functional_tests/support/issue191/setup.cfg
 functional_tests/support/issue191/setup.py
 functional_tests/support/issue191/test.py
+functional_tests/support/issue269/test_bad_class.py
+functional_tests/support/issue279/test_mod_setup_fails.py
 functional_tests/support/ltfn/state.py
 functional_tests/support/ltfn/test_mod.py
 functional_tests/support/ltfn/test_pak1/__init__.py
@@ -312,6 +314,8 @@ unit_tests/test_importer.py
 unit_tests/test_inspector.py
 unit_tests/test_isolation_plugin.py
 unit_tests/test_issue155.rst
+unit_tests/test_issue270.rst
+unit_tests/test_issue270_fixtures.py
 unit_tests/test_issue_006.py
 unit_tests/test_issue_064.py
 unit_tests/test_issue_065.py
@@ -325,6 +329,7 @@ unit_tests/test_loader.py
 unit_tests/test_logcapture_plugin.py
 unit_tests/test_logging.py
 unit_tests/test_ls_tree.rst
+unit_tests/test_multiprocess.py
 unit_tests/test_multiprocess_runner.py
 unit_tests/test_pdb_plugin.py
 unit_tests/test_plugin.py
@@ -359,6 +364,8 @@ unit_tests/support/foo/bar/buz.py
 unit_tests/support/foo/tests/dir_test_file.py
 unit_tests/support/issue006/tests.py
 unit_tests/support/issue065/tests.py
+unit_tests/support/issue270/__init__.py
+unit_tests/support/issue270/foo_test.py
 unit_tests/support/other/file.txt
 unit_tests/support/pkgorg/lib/modernity.py
 unit_tests/support/pkgorg/tests/test_mod.py

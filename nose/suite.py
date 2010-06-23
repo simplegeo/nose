@@ -18,9 +18,13 @@ from nose.proxy import ResultProxyFactory
 from nose.util import isclass, resolve_name, try_run
 
 if sys.platform == 'cli':
-    import clr
-    clr.AddReference("IronPython")
-    from IronPython.Runtime.Exceptions import StringException
+    if sys.version_info[:2] < (2, 6):
+        import clr
+        clr.AddReference("IronPython")
+        from IronPython.Runtime.Exceptions import StringException
+    else:
+        class StringException(Exception):
+            pass
 
 log = logging.getLogger(__name__)
 #log.setLevel(logging.DEBUG)
@@ -28,6 +32,9 @@ log = logging.getLogger(__name__)
 # Singleton for default value -- see ContextSuite.__init__ below
 _def = object()
 
+
+def _strclass(cls):
+    return "%s.%s" % (cls.__module__, cls.__name__)
 
 class MixedContextError(Exception):
     """Error raised when a context suite sees tests from more than
@@ -49,7 +56,7 @@ class LazySuite(unittest.TestSuite):
         
     def __repr__(self):
         return "<%s tests=generator (%s)>" % (
-            unittest._strclass(self.__class__), id(self))
+            _strclass(self.__class__), id(self))
 
     def __hash__(self):
         return object.__hash__(self)
@@ -138,14 +145,21 @@ class ContextSuite(LazySuite):
         self.resultProxy = resultProxy
         self.has_run = False
         self.can_split = can_split
+        self.error_context = None
         LazySuite.__init__(self, tests)
 
     def __repr__(self):
         return "<%s context=%s>" % (
-            unittest._strclass(self.__class__),
+            _strclass(self.__class__),
             getattr(self.context, '__name__', self.context))
     __str__ = __repr__
 
+    def id(self):
+        if self.error_context:
+            return '%s:%s' % (repr(self), self.error_context)
+        else:
+            return repr(self)
+    
     def __hash__(self):
         return object.__hash__(self)
 
@@ -184,6 +198,7 @@ class ContextSuite(LazySuite):
         except KeyboardInterrupt:
             raise
         except:
+            self.error_context = 'setup'
             result.addError(self, self._exc_info())
             return
         try:
@@ -202,6 +217,7 @@ class ContextSuite(LazySuite):
             except KeyboardInterrupt:
                 raise
             except:
+                self.error_context = 'teardown'
                 result.addError(self, self._exc_info())
 
     def hasFixtures(self, ctx_callback=None):

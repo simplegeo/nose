@@ -1,12 +1,12 @@
 Metadata-Version: 1.0
 Name: nose
-Version: 0.11.1
+Version: 0.11.3
 Summary: nose extends unittest to make testing easier
 Home-page: http://somethingaboutorange.com/mrl/projects/nose/
 Author: Jason Pellerin
 Author-email: jpellerin+nose@gmail.com
 License: GNU LGPL
-Download-URL: http://somethingaboutorange.com/mrl/projects/nose/nose-0.11.1.tar.gz
+Download-URL: http://somethingaboutorange.com/mrl/projects/nose/nose-0.11.3.tar.gz
 Description: nose extends the test loading and running features of unittest, making
         it easier to write, find and run tests.
         
