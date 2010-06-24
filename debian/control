@@ -7,7 +7,7 @@ Build-Depends: python-dev (>= 2.5.4-1~), python-setuptools (>= 0.6a9), debhelper
 Homepage: http://somethingaboutorange.com/mrl/projects/nose/
 Vcs-Svn: svn://svn.debian.org/python-modules/packages/nose/trunk/
 Vcs-Browser: http://svn.debian.org/viewsvn/python-modules/packages/nose/trunk/
-Standards-Version: 3.8.1
+Standards-Version: 3.8.4
 
 Package: python-nose
 Architecture: all
