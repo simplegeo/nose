@@ -1,3 +1,15 @@
+nose (0.11.3-1sg2) lucid; urgency=low
+
+  [ Ian Eure ]
+  * Nuke .pyc files
+  * Ignore pyc files.
+  * Update standards-version.
+  * Fix some lintian warnings.
+
+  [ SimpleGeo Nerds ]
+
+ -- SimpleGeo Nerds <nerds@simplegeo.com>  Sat, 26 Jun 2010 00:01:57 +0000
+
 nose (0.11.3-1sg0) unstable; urgency=low
 
   * New upstream version.
